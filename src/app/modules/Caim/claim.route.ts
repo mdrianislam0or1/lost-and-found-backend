@@ -27,4 +27,6 @@ router.put(
   ClaimController.updateMyProfile
 );
 
+router.delete("/claims/:claimId", auth("admin"), ClaimController.deleteClaim);
+
 export const claimRoutes = router;

@@ -208,6 +208,37 @@ const updateMyProfile = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
+const deleteClaim = async (req: Request, res: Response) => {
+  try {
+    const { claimId } = req.params;
+
+    const deletedClaim = await ClaimServices.deleteClaim(claimId);
+
+    if (!deletedClaim) {
+      return sendResponse(res, {
+        statusCode: httpStatus.NOT_FOUND,
+        success: false,
+        message: "Claim not found",
+        data: null,
+      });
+    }
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Claim deleted successfully",
+      data: deletedClaim,
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+      success: false,
+      message: error.message || "Internal server error",
+      data: null,
+    });
+  }
+};
+
 export const ClaimController = {
   createClaim,
   getClaims,
@@ -215,4 +246,5 @@ export const ClaimController = {
   updateClaimStatus,
   getProfile,
   updateMyProfile,
+  deleteClaim,
 };

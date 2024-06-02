@@ -150,6 +150,46 @@ const getMyLostItems = async (req: Request, res: Response) => {
   }
 };
 
+const getRecentlyReportedLostItems = async (req: Request, res: Response) => {
+  try {
+    const lostItems = await LostItemService.getRecentlyReportedLostItems();
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Recently reported lost items retrieved successfully",
+      data: lostItems,
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+      success: false,
+      message: error.message || "Internal server error",
+      data: null,
+    });
+  }
+};
+
+const getSingleLostItemById = async (req: Request, res: Response) => {
+  try {
+    const lostItemId = req.params.id;
+    const lostItem = await LostItemService.getSingleLostItemById(lostItemId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Lost item retrieved successfully",
+      data: lostItem,
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+      success: false,
+      message: error.message || "Internal server error",
+      data: null,
+    });
+  }
+};
+
 const updateLostItem = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.id;
@@ -180,88 +220,27 @@ const deleteLostItem = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.id;
     const lostItemId = req.params.id;
-    await LostItemService.deleteLostItem(userId, lostItemId);
-    sendResponse(res, {
-      statusCode: httpStatus.NO_CONTENT,
-      success: true,
-      message: "Lost item deleted successfully",
-      data: null,
-    });
-  } catch (error: any) {
-    sendResponse(res, {
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      success: false,
-      message: error.message || "Internal server error",
-      data: null,
-    });
-  }
-};
-
-const getRecentlyReportedLostItems = async (req: Request, res: Response) => {
-  try {
-    const lostItems = await LostItemService.getRecentlyReportedLostItems();
-
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "Recently reported lost items retrieved successfully",
-      data: lostItems,
-    });
-  } catch (error: any) {
-    sendResponse(res, {
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      success: false,
-      message: error.message || "Internal server error",
-      data: null,
-    });
-  }
-};
-
-const updateLostItems = async (req: Request, res: Response) => {
-  try {
-    const userId = (req as any).user.id;
-    const { itemId } = req.params;
-    const updateData = req.body;
-
-    const updatedItem = await LostItemService.updateLostItems(
-      itemId,
+    const deletedLostItem = await LostItemService.deleteLostItem(
       userId,
-      updateData
+      lostItemId
     );
 
-    if (!updatedItem) {
-      return res.status(httpStatus.NOT_FOUND).json({
-        success: false,
+    if (!deletedLostItem) {
+      sendResponse(res, {
         statusCode: httpStatus.NOT_FOUND,
-        message: "Item not found",
+        success: false,
+        message:
+          "Lost item not found or you don't have permission to delete it",
+        data: null,
       });
+      return;
     }
-
-    res.status(httpStatus.OK).json({
-      success: true,
-      statusCode: httpStatus.OK,
-      message: "Lost item updated successfully",
-      data: updatedItem,
-    });
-  } catch (error: any) {
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      success: false,
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      message: error.message || "Internal server error",
-    });
-  }
-};
-
-const getSingleLostItemById = async (req: Request, res: Response) => {
-  try {
-    const { itemId } = req.params;
-    const foundItem = await LostItemService.getSingleLostItemById(itemId);
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: "Lost item retrieved successfully",
-      data: foundItem,
+      message: "Lost item deleted successfully",
+      data: deletedLostItem,
     });
   } catch (error: any) {
     sendResponse(res, {
@@ -272,16 +251,14 @@ const getSingleLostItemById = async (req: Request, res: Response) => {
     });
   }
 };
-
 export const LostItemController = {
   createLostItemCategory,
   getLostItemCategories,
   reportLostItem,
   getLostItems,
   getMyLostItems,
+  getRecentlyReportedLostItems,
+  getSingleLostItemById,
   updateLostItem,
   deleteLostItem,
-  getRecentlyReportedLostItems,
-  updateLostItems,
-  getSingleLostItemById,
 };

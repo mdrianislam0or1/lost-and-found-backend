@@ -119,6 +119,37 @@ const updateProfile = async (
   return updatedProfile;
 };
 
+const deleteClaim = async (claimId: string): Promise<Claim | null> => {
+  const claim = await prisma.claim.findUnique({
+    where: { id: claimId },
+    include: {
+      foundItem: true,
+      lostItem: true,
+    },
+  });
+
+  if (!claim) {
+    throw new Error("Claim not found");
+  }
+
+  if (claim.foundItem) {
+    await prisma.foundItem.delete({
+      where: { id: claim.foundItem.id },
+    });
+  }
+
+  if (claim.lostItem) {
+    await prisma.lostItem.delete({
+      where: { id: claim.lostItem.id },
+    });
+  }
+  const deletedClaim = await prisma.claim.delete({
+    where: { id: claimId },
+  });
+
+  return deletedClaim;
+};
+
 export const ClaimServices = {
   createClaim,
   getClaims,
@@ -126,4 +157,5 @@ export const ClaimServices = {
   getUserClaims,
   getProfile,
   updateProfile,
+  deleteClaim,
 };

@@ -85,37 +85,6 @@ const getLostItemsByUserId = async (userId: string) => {
   return { lostItems, total };
 };
 
-const updateLostItem = async (
-  userId: string,
-  lostItemId: string,
-  data: Partial<LostItem>
-) => {
-  const { contactInfo, ...restData } = data;
-
-  const contactInfoValue: any = contactInfo !== undefined ? contactInfo : null;
-
-  const lostItem = await prisma.lostItem.updateMany({
-    where: {
-      id: lostItemId,
-      userId,
-    },
-    data: {
-      ...restData,
-      contactInfo: contactInfoValue,
-    },
-  });
-  return lostItem;
-};
-
-const deleteLostItem = async (userId: string, lostItemId: string) => {
-  await prisma.lostItem.deleteMany({
-    where: {
-      id: lostItemId,
-      userId,
-    },
-  });
-};
-
 const getRecentlyReportedLostItems = async (): Promise<LostItem[]> => {
   const lostItems = await prisma.lostItem.findMany({
     orderBy: {
@@ -131,32 +100,52 @@ const getRecentlyReportedLostItems = async (): Promise<LostItem[]> => {
   return lostItems;
 };
 
-const updateLostItems = async (
-  itemId: string,
-  userId: string,
-  data: Partial<LostItem>
-) => {
-  const lostItem = await prisma.lostItem.updateMany({
-    where: { id: itemId, userId },
-    data,
+const getSingleLostItemById = async (
+  lostItemId: string
+): Promise<LostItem | null> => {
+  const lostItem = await prisma.lostItem.findUnique({
+    where: {
+      id: lostItemId,
+    },
   });
   return lostItem;
 };
 
-const getSingleLostItemById = async (itemId: string) => {
-  const lostItem = await prisma.lostItem.findUnique({
-    where: { id: itemId },
-    include: {
-      user: true,
-      category: true,
+const updateLostItem = async (
+  userId: string,
+  lostItemId: string,
+  data: Partial<LostItem>
+) => {
+  const { contactInfo, ...restData } = data;
+
+  const contactInfoValue: any = contactInfo !== undefined ? contactInfo : null;
+
+  const updatedLostItem = await prisma.lostItem.updateMany({
+    where: {
+      id: lostItemId,
+      userId,
+    },
+    data: {
+      ...restData,
+      contactInfo: contactInfoValue,
+    },
+  });
+  return updatedLostItem;
+};
+
+const deleteLostItem = async (userId: string, lostItemId: string) => {
+  const deletedLostItem = await prisma.lostItem.deleteMany({
+    where: {
+      id: lostItemId,
+      userId,
     },
   });
 
-  if (!lostItem) {
-    throw new Error("Found item not found");
+  if (deletedLostItem.count === 0) {
+    return null;
   }
 
-  return lostItem;
+  return deletedLostItem;
 };
 
 export const LostItemService = {
@@ -166,8 +155,7 @@ export const LostItemService = {
   getLostItems,
   getLostItemsByUserId,
   updateLostItem,
-  deleteLostItem,
-  getRecentlyReportedLostItems,
-  updateLostItems,
   getSingleLostItemById,
+  getRecentlyReportedLostItems,
+  deleteLostItem,
 };

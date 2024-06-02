@@ -29,23 +29,24 @@ router.get(
 );
 
 router.get("/my-found-items", auth(), FoundItemController.getMyFoundItems);
-router.put("/found-items/:itemId", auth(), FoundItemController.updateFoundItem);
 
 router.get(
   "/recently-reported-found-items",
   FoundItemController.getRecentlyReportedFoundItems
 );
 
-router.delete(
-  "/found-items/:itemId",
-  auth(),
-  FoundItemController.deleteFoundItem
-);
+router.put("/found-items/:itemId", auth(), FoundItemController.updateFoundItem);
 
 router.get(
   "/found-items/:itemId",
   auth("admin", "user"),
   FoundItemController.getSingleFoundItemById
+);
+
+router.delete(
+  "/found-items/:itemId",
+  auth("admin"),
+  FoundItemController.deleteFoundItem
 );
 
 export const foundItemRoutes = router;

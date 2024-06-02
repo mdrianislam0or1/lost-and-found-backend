@@ -92,23 +92,6 @@ const getMyFoundItems = async (req: Request, res: Response) => {
   }
 };
 
-const deleteFoundItem = async (req: Request, res: Response) => {
-  try {
-    const userId = (req as any).user.id;
-    const { itemId } = req.params;
-
-    await FoundItemServices.deleteFoundItem(itemId, userId);
-
-    res.status(httpStatus.NO_CONTENT).send();
-  } catch (error: any) {
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      success: false,
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      message: error.message || "Internal server error",
-    });
-  }
-};
-
 const getFoundItems = async (req: Request, res: Response): Promise<void> => {
   try {
     const {
@@ -176,7 +159,7 @@ const getRecentlyReportedFoundItems = async (req: Request, res: Response) => {
 
 const updateFoundItem = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user.id;
     const { itemId } = req.params;
     const updateData = req.body;
 
@@ -187,23 +170,24 @@ const updateFoundItem = async (req: Request, res: Response) => {
     );
 
     if (!updatedItem) {
-      return res.status(httpStatus.NOT_FOUND).json({
+      return res.status(404).json({
         success: false,
-        statusCode: httpStatus.NOT_FOUND,
+        statusCode: 404,
         message: "Item not found",
       });
     }
 
-    res.status(httpStatus.OK).json({
+    res.status(200).json({
       success: true,
-      statusCode: httpStatus.OK,
+      statusCode: 200,
       message: "Found item updated successfully",
       data: updatedItem,
     });
   } catch (error: any) {
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+    console.error("Error updating found item:", error);
+    res.status(500).json({
       success: false,
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+      statusCode: 500,
       message: error.message || "Internal server error",
     });
   }
@@ -230,6 +214,29 @@ const getSingleFoundItemById = async (req: Request, res: Response) => {
   }
 };
 
+const deleteFoundItem = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.id;
+    const { itemId } = req.params;
+
+    const deletedItem = await FoundItemServices.deleteFoundItem(itemId, userId);
+
+    res.status(200).json({
+      success: true,
+      statusCode: 200,
+      message: "Found item deleted successfully",
+      data: deletedItem,
+    });
+  } catch (error: any) {
+    console.error("Error deleting found item:", error);
+    res.status(500).json({
+      success: false,
+      statusCode: 500,
+      message: error.message || "Internal server error",
+    });
+  }
+};
+
 export const FoundItemController = {
   createFoundItemCategory,
   getFoundItemCategories,
@@ -237,7 +244,7 @@ export const FoundItemController = {
   getFoundItems,
   getMyFoundItems,
   updateFoundItem,
-  deleteFoundItem,
   getRecentlyReportedFoundItems,
   getSingleFoundItemById,
+  deleteFoundItem,
 };

@@ -22,29 +22,19 @@ router.post(
 );
 router.get("/", LostItemController.getLostItems);
 router.get("/my-items", auth(), LostItemController.getMyLostItems);
-router.put(
-  "/:id",
-  auth(),
-  validateRequest(updateLostItemSchema),
-  LostItemController.updateLostItem
-);
-router.delete("/:id", auth(), LostItemController.deleteLostItem);
-
 router.get(
   "/recent-lost-items",
   LostItemController.getRecentlyReportedLostItems
 );
 
 router.get(
-  "/lostItem/:id",
+  "/:id",
   auth("user", "admin"),
   LostItemController.getSingleLostItemById
 );
 
-router.put(
-  "/lostItem/:id",
-  auth("user", "admin"),
-  LostItemController.updateLostItems
-);
+router.put("/:id", auth("user", "admin"), LostItemController.updateLostItem);
+
+router.delete("/:id", auth("user", "admin"), LostItemController.deleteLostItem);
 
 export const lostItemRoutes = router;

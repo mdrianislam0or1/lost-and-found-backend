@@ -141,12 +141,6 @@ const getMyFoundItems = async (userId: string) => {
   return foundItems;
 };
 
-const deleteFoundItem = async (itemId: string, userId: string) => {
-  await prisma.foundItem.deleteMany({
-    where: { id: itemId, userId },
-  });
-};
-
 const getRecentlyReportedFoundItems = async (limit: number = 10) => {
   const foundItems = await prisma.foundItem.findMany({
     orderBy: {
@@ -161,16 +155,37 @@ const getRecentlyReportedFoundItems = async (limit: number = 10) => {
   return foundItems;
 };
 
-const updateFoundItem = async (
-  itemId: string,
-  userId: string,
-  data: Partial<FoundItem>
-) => {
-  const foundItem = await prisma.foundItem.updateMany({
-    where: { id: itemId, userId },
-    data,
-  });
-  return foundItem;
+const updateFoundItem = async (itemId: string, userId: string, data: any) => {
+  try {
+    if (data.dateFound) {
+      data.dateFound = new Date(data.dateFound).toISOString();
+    }
+
+    const updatedItem = await prisma.foundItem.updateMany({
+      where: {
+        id: itemId,
+        userId: userId,
+      },
+      data: {
+        categoryId: data.categoryId,
+        foundItemName: data.foundItemName,
+        description: data.description,
+        location: data.location,
+        dateFound: data.dateFound,
+        contactInfo: data.contactInfo,
+        images: data.images,
+      },
+    });
+
+    if (updatedItem.count === 0) {
+      throw new Error("No item was updated");
+    }
+
+    return updatedItem;
+  } catch (error) {
+    console.error("Error updating found item:", error);
+    throw new Error("Failed to update found item.");
+  }
 };
 
 const getSingleFoundItemById = async (itemId: string) => {
@@ -189,6 +204,27 @@ const getSingleFoundItemById = async (itemId: string) => {
   return foundItem;
 };
 
+const deleteFoundItem = async (itemId: string, userId: string) => {
+  try {
+    const deletedItem = await prisma.foundItem.deleteMany({
+      where: {
+        id: itemId,
+        userId: userId,
+      },
+    });
+
+    if (deletedItem.count === 0) {
+      throw new Error(
+        "Item not found or you're not authorized to delete this item"
+      );
+    }
+
+    return deletedItem;
+  } catch (error) {
+    console.error("Error deleting found item:", error);
+    throw new Error("Failed to delete found item.");
+  }
+};
 export const FoundItemServices = {
   createFoundItemCategory,
   getFoundItemCategories,
@@ -196,7 +232,7 @@ export const FoundItemServices = {
   getFoundItems,
   getMyFoundItems,
   updateFoundItem,
-  deleteFoundItem,
   getRecentlyReportedFoundItems,
   getSingleFoundItemById,
+  deleteFoundItem,
 };
