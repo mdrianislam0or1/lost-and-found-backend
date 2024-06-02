@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String       @id @default(uuid())
+  name       String
+  email      String       @unique
+  password   String
+  role       Role?        @default(user)
+  status     Status?      @default(active)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  foundItems FoundItem[]
+  lostItems  LostItem[]
+  claims     Claim[]
+  profile    UserProfile?
+}
+
+enum Role {
+  user
+  admin
+  super_admin
+}
+
+enum Status {
+  active
+  blocked
+}
+
+model UserProfile {
+  id             String  @id @default(uuid())
+  userId         String  @unique
+  user           User    @relation(fields: [userId], references: [id])
+  bio            String
+  age            Int
+  profilePicture String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FoundItemCategory {
+  id         String      @id @default(uuid())
+  name       String
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  foundItems FoundItem[]
+}
+
+model FoundItem {
+  id            String            @id @default(uuid())
+  userId        String
+  user          User              @relation(fields: [userId], references: [id])
+  categoryId    String
+  category      FoundItemCategory @relation(fields: [categoryId], references: [id])
+  foundItemName String
+  description   String
+  location      String
+  dateFound     DateTime
+  contactInfo   Json?
+  images        String[]          @default([])
+  status        String            @default("PENDING")
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  claims        Claim[]
+}
+
+model LostItemCategory {
+  id        String     @id @default(uuid())
+  name      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now())
+  lostItems LostItem[]
+}
+
+model LostItem {
+  id           String           @id @default(uuid())
+  userId       String
+  user         User             @relation(fields: [userId], references: [id])
+  categoryId   String
+  category     LostItemCategory @relation(fields: [categoryId], references: [id])
+  lostItemName String
+  description  String
+  location     String?
+  isFound      Boolean          @default(false)
+  contactInfo  Json?
+  images       String[]         @default([])
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @default(now())
+  claims       Claim[]
+}
+
+model Claim {
+  id                     String     @id @default(uuid())
+  userId                 String
+  user                   User       @relation(fields: [userId], references: [id])
+  foundItemId            String?
+  foundItem              FoundItem? @relation(fields: [foundItemId], references: [id])
+  lostItemId             String?
+  lostItem               LostItem?  @relation(fields: [lostItemId], references: [id])
+  status                 String     @default("PENDING")
+  distinguishingFeatures String
+  lostDate               DateTime
+  proofOfPurchase        String?
+  photos                 String[]
+  ownershipDocs          String?
+  detailedLossAccount    String?
+  matchingAccessories    String?
+  securityFeatures       String?
+  thirdPartyConfirmation String?
+  createdAt              DateTime   @default(now())
+  updatedAt              DateTime   @updatedAt
+}

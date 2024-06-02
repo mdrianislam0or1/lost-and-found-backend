@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "name": "lostfound-backend",
+  "builds": [
+    {
+      "src": "dist/server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/dist/server.js"
+    }
+  ]
+}
