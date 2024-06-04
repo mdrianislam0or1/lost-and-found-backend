@@ -1,101 +1,150 @@
-# Project Name
+### Backend `README.md`
 
-Lost && Found
+````markdown
+# Lost & Found Backend
 
-## Description
+## Overview
 
-Brief description of your project.
+This repository contains the backend code for the Lost & Found website, a community-driven platform designed to help individuals report and reclaim lost items.
 
-## Prerequisites
+## Technologies Used
 
-- Node.js installed on your machine
-- PostgreSQL database
+- Node.js
+- Express.js
+- TypeScript
+- Prisma (ORM for database management)
+- JWT (for authentication)
+- API Integration with Frontend
 
-## Installation
+## Live Demo
+
+[Backend Live Link](https://lost-and-found-backend-tau.vercel.app/)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm (v6 or higher) or yarn (v1.22 or higher)
+- PostgreSQL (or any other supported database)
+
+### Installation
 
 1. Clone the repository:
 
-   ```bash
-   git clone https://github.com/Porgramming-Hero-web-course/l2-b2-fullstack-track-assignment-8-mdrianislam0or1
-   Install dependencies:
+   ```sh
+   git clone https://github.com/mdrianislam0or1/lost-and-found-backend.git
+
+    Navigate to the project directory:
+
+    sh
    ```
 
-   ```bash
-   Api Link https://lostfoundapi.vercel.app/
-   ```
+cd lost-and-found-backend
 
-   ```bash
-   Api Documentation Link https://documenter.getpostman.com/view/18244395/2sA35K2g9b
-   ```
+Install dependencies:
 
-## bash
-
-cd your-project
+sh
 
 npm install
 
+# or
+
+yarn install
+
 Set up environment variables:
 
-Create a .env file in the root directory of your project and add the following environment variables:
+Create a .env file in the root directory and add the following environment variables:
 
-## plaintext
+# .env
 
-DATABASE_URL="postgres://postgres.rlvalcgjrvlslkolezaa:**\*\*\***@aws-0-ap-southeast-1.pooler.supabase.com:**\*\***/postgres"
+DATABASE_URL=\***\*\*\*\***
+NODE_ENV=\***\*\*\*\***
+PORT=\***\*\*\*\***
+JWT_SECRET=\***\*\*\*\***
+EXPIRES_IN=\***\*\*\*\***
+REFRESH_TOKEN_SECRET=\***\*\*\*\***
+REFRESH_TOKEN_EXPIRES_IN=\***\*\*\*\***
+RESET_PASS_TOKEN=\***\*\*\*\***
+RESET_PASS_TOKEN_EXPIRES_IN=\***\*\*\*\***
+RESET_PASS_LINK="\***\*\*\*\***
+EMAIL = \***\*\*\*\***
+APP_PASS =\***\*\*\*\***
 
-NODE_ENV="development"
+Set up the database:
 
-PORT=5000
+sh
 
-JWT_SECRET="ksfljkdsjflksdjflk"
+    npx prisma migrate dev
 
-EXPIRES_IN="30d"
+Running the Development Server
 
-## Usage
+sh
 
-Start the server:
+npm run dev
 
-## bash
+# or
+
+yarn dev
+
+Building for Production
+
+sh
+
+npm run build
+
+# or
+
+yarn build
+
+Running the Production Server
+
+After building the project, you can start the production server with:
+
+sh
 
 npm start
 
-The server will start on port 5000 by default.
+# or
 
-You can change the port by modifying the PORT environment variable in the .
+yarn start
 
-env file.
+Project Structure
 
-## Features
+    src/ - Contains the source code.
+        controllers/ - Contains the request handlers.
+        middlewares/ - Contains middleware functions.
+        models/ - Contains Prisma schema and database models.
+        routes/ - Contains Express routes.
+        services/ - Contains business logic and helper functions.
+        utils/ - Contains utility functions.
+        index.ts - Entry point of the application.
 
-...
+Features
 
-## API Documentation
+    User Authentication:
+        Secure login and registration with JWT-based authentication.
 
-Describe the available endpoints and how to use them. You can provide a brief overview here and link to more detailed documentation if available.
+    Lost & Found Item Management:
+        APIs to submit lost and found items with details like category, description, date, and location.
+        Update and delete functionality for lost and found items.
 
-## bash
+    Profile Management:
+        APIs to manage user profile, claim requests, and reported items.
 
-npm test
+    Admin Dashboard:
+        User management and website activity monitoring features for administrators.
 
-Deployment
+    Error Handling and Validation:
+        Comprehensive error handling and input validation for all endpoints.
 
-Add instructions on how to deploy your project to a live system.
+Contribution
 
-## Built With
-
-Node.js
-
-Express.js
-
-PostgreSQL
-
-Other dependencies...
-
-## Authors
-
-...
-
-## License
+Feel free to contribute to this project by opening issues and submitting pull requests.
+License
 
 This project is licensed under the MIT License.
+Contact
 
-Replace placeholders like "Project Name", "your-username", "your-project", and "Feature 1", "Feature 2", etc., with your actual project name, GitHub username, project repository, and features respectively. You can also add more sections as needed.
+For any inquiries, please contact us at rianislamrian@gmail.com.
+````

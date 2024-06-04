@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "lostfound-backend",
+  "name": "lost-and-found-backend",
   "builds": [
     {
       "src": "dist/server.js",
