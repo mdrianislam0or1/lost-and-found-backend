@@ -251,6 +251,56 @@ const deleteLostItem = async (req: Request, res: Response) => {
     });
   }
 };
+
+const updateIsFound = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.id;
+    const lostItemId = req.params.id;
+    const { isFound } = req.body;
+
+    if (typeof isFound !== "boolean") {
+      sendResponse(res, {
+        statusCode: httpStatus.BAD_REQUEST,
+        success: false,
+        message: "Invalid 'isFound' value. It should be a boolean.",
+        data: null,
+      });
+      return;
+    }
+
+    const updatedLostItem = await LostItemService.updateIsFound(
+      userId,
+      lostItemId,
+      isFound
+    );
+
+    if (!updatedLostItem) {
+      sendResponse(res, {
+        statusCode: httpStatus.NOT_FOUND,
+        success: false,
+        message:
+          "Lost item not found or you don't have permission to update it",
+        data: null,
+      });
+      return;
+    }
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "'isFound' value updated successfully",
+      data: updatedLostItem,
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+      success: false,
+      message: error.message || "Internal server error",
+      data: null,
+    });
+  }
+};
+
 export const LostItemController = {
   createLostItemCategory,
   getLostItemCategories,
@@ -261,4 +311,5 @@ export const LostItemController = {
   getSingleLostItemById,
   updateLostItem,
   deleteLostItem,
+  updateIsFound,
 };

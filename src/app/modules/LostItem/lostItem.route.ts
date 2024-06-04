@@ -2,7 +2,11 @@ import { Router } from "express";
 import { LostItemController } from "./lostItem.controller";
 import auth from "../../middleware/auth";
 import validateRequest from "../../middleware/validateRequest";
-import { lostItemSchema, updateLostItemSchema } from "./lostItem.validation";
+import {
+  lostItemSchema,
+  updateIsFoundSchema,
+  updateLostItemSchema,
+} from "./lostItem.validation";
 
 const router = Router();
 
@@ -36,5 +40,12 @@ router.get(
 router.put("/:id", auth("user", "admin"), LostItemController.updateLostItem);
 
 router.delete("/:id", auth("user", "admin"), LostItemController.deleteLostItem);
+
+router.patch(
+  "/is-found/:id",
+  auth("user", "admin"),
+  validateRequest(updateIsFoundSchema),
+  LostItemController.updateIsFound
+);
 
 export const lostItemRoutes = router;

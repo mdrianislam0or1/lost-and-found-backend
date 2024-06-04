@@ -24,6 +24,7 @@ CREATE TABLE "UserProfile" (
     "userId" TEXT NOT NULL,
     "bio" TEXT NOT NULL,
     "age" INTEGER NOT NULL,
+    "profilePicture" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

@@ -246,6 +246,31 @@ const updateUserProfile = async (req: Request, res: Response) => {
   }
 };
 
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    console.log(`Attempting to delete user with ID: ${userId}`);
+
+    await UserServices.deleteUser(userId);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "User deleted successfully",
+      data: null,
+    });
+  } catch (error) {
+    console.error(`Error deleting user with ID: `, error);
+
+    sendResponse(res, {
+      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+      success: false,
+      message: "An error occurred while deleting the user",
+      data: null,
+    });
+  }
+};
+
 export const UserControllers = {
   registerUser,
   loginUser,
@@ -253,4 +278,5 @@ export const UserControllers = {
   getUserProfile,
   changePassword,
   updateUserProfile,
+  deleteUser,
 };

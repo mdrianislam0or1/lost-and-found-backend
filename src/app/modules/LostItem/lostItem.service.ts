@@ -148,6 +148,28 @@ const deleteLostItem = async (userId: string, lostItemId: string) => {
   return deletedLostItem;
 };
 
+const updateIsFound = async (
+  userId: string,
+  lostItemId: string,
+  isFound: boolean
+) => {
+  const updatedLostItem = await prisma.lostItem.updateMany({
+    where: {
+      id: lostItemId,
+      userId,
+    },
+    data: {
+      isFound,
+    },
+  });
+
+  if (updatedLostItem.count === 0) {
+    return null;
+  }
+
+  return updatedLostItem;
+};
+
 export const LostItemService = {
   createLostItemCategory,
   getLostItemCategories,
@@ -158,4 +180,5 @@ export const LostItemService = {
   getSingleLostItemById,
   getRecentlyReportedLostItems,
   deleteLostItem,
+  updateIsFound,
 };

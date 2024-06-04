@@ -238,6 +238,66 @@ const deleteClaim = async (req: Request, res: Response) => {
     });
   }
 };
+const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await ClaimServices.getAllUsers();
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Users retrieved successfully",
+      data: users,
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+      success: false,
+      message: error.message || "Internal server error",
+      data: null,
+    });
+  }
+};
+
+const updateUserStatus = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const { status } = req.body;
+
+    const updatedUser = await ClaimServices.updateUserStatus(userId, status);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "User status updated successfully",
+      data: updatedUser,
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+      success: false,
+      message: error.message || "Internal server error",
+      data: null,
+    });
+  }
+};
+
+const getWebsiteMetrics = async (req: Request, res: Response) => {
+  try {
+    const metrics = await ClaimServices.getWebsiteMetrics();
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Website metrics retrieved successfully",
+      data: metrics,
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+      success: false,
+      message: error.message || "Internal server error",
+      data: null,
+    });
+  }
+};
 
 export const ClaimController = {
   createClaim,
@@ -247,4 +307,7 @@ export const ClaimController = {
   getProfile,
   updateMyProfile,
   deleteClaim,
+  getAllUsers,
+  updateUserStatus,
+  getWebsiteMetrics,
 };

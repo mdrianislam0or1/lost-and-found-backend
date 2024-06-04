@@ -1,5 +1,5 @@
 import prisma from "../../shared/prisma";
-import { Claim, UserProfile } from "@prisma/client";
+import { Claim, Status, User, UserProfile } from "@prisma/client";
 
 const createClaim = async (
   userId: string,
@@ -150,6 +150,41 @@ const deleteClaim = async (claimId: string): Promise<Claim | null> => {
   return deletedClaim;
 };
 
+const getAllUsers = async (): Promise<User[]> => {
+  return await prisma.user.findMany({
+    include: {
+      profile: true,
+    },
+  });
+};
+
+const updateUserStatus = async (
+  userId: string,
+  status: Status
+): Promise<User> => {
+  return await prisma.user.update({
+    where: { id: userId },
+    data: { status },
+  });
+};
+
+const getWebsiteMetrics = async () => {
+  const totalNumberOfReportedItems =
+    (await prisma.foundItem.count()) + (await prisma.lostItem.count());
+
+  const totalNumberOfLostItems = await prisma.lostItem.count();
+  const numberOfClaims = await prisma.claim.count();
+  const numberOfFoundItems = await prisma.lostItem.count({
+    where: { isFound: true },
+  });
+
+  return {
+    totalNumberOfReportedItems,
+    totalNumberOfLostItems,
+    numberOfClaims,
+    numberOfFoundItems,
+  };
+};
 export const ClaimServices = {
   createClaim,
   getClaims,
@@ -158,4 +193,7 @@ export const ClaimServices = {
   getProfile,
   updateProfile,
   deleteClaim,
+  getAllUsers,
+  updateUserStatus,
+  getWebsiteMetrics,
 };

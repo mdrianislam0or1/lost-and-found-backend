@@ -24,3 +24,7 @@ export const updateLostItemSchema = object({
   contactInfo: optional(contactInfoSchema),
   images: optional(array(string().url())),
 });
+
+export const updateIsFoundSchema = object({
+  isFound: boolean(),
+});

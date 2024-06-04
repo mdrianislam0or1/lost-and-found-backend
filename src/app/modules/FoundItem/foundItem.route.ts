@@ -24,7 +24,7 @@ router.post(
 
 router.get(
   "/found-items",
-  auth("admin", "user"),
+  // auth("admin", "user"),
   FoundItemController.getFoundItems
 );
 

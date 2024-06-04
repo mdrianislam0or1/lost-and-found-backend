@@ -29,4 +29,16 @@ router.put(
 
 router.delete("/claims/:claimId", auth("admin"), ClaimController.deleteClaim);
 
+router.get("/users", auth("admin"), ClaimController.getAllUsers);
+router.put(
+  "/users/:userId/status",
+  auth("admin"),
+  ClaimController.updateUserStatus
+);
+router.get(
+  "/website-metrics",
+  auth("admin"),
+  ClaimController.getWebsiteMetrics
+);
+
 export const claimRoutes = router;

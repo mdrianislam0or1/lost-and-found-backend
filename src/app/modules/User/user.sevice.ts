@@ -111,6 +111,28 @@ const changePassword = async (userId: string, newPassword: string) => {
   });
 };
 
+const deleteUser = async (userId: string) => {
+  try {
+    console.log(`Deleting user profile and user with ID: ${userId}`);
+
+    await prisma.$transaction(async (prisma) => {
+      await prisma.userProfile.delete({
+        where: { userId },
+      });
+      await prisma.user.delete({
+        where: { id: userId },
+      });
+    });
+
+    console.log(
+      `Successfully deleted user profile and user with ID: ${userId}`
+    );
+  } catch (error) {
+    console.error(`Error deleting user with ID: ${userId}`, error);
+    throw error;
+  }
+};
+
 export const UserServices = {
   registerUser,
   getUserByUsernameOrEmail,
@@ -119,4 +141,5 @@ export const UserServices = {
   getUserById,
   updateUserProfile,
   changePassword,
+  deleteUser,
 };
