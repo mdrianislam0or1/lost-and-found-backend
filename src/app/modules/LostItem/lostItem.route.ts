@@ -37,13 +37,21 @@ router.get(
   LostItemController.getSingleLostItemById
 );
 
-router.put("/:id", auth("user", "admin"), LostItemController.updateLostItem);
+router.put(
+  "/:id",
+  //  auth("user", "admin"),
+  LostItemController.updateLostItem
+);
 
-router.delete("/:id", auth("user", "admin"), LostItemController.deleteLostItem);
+router.delete(
+  "/:id",
+  // auth("user", "admin"),
+  LostItemController.deleteLostItem
+);
 
 router.patch(
   "/is-found/:id",
-  auth("user", "admin"),
+  // auth("user", "admin"),
   validateRequest(updateIsFoundSchema),
   LostItemController.updateIsFound
 );

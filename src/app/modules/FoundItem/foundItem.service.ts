@@ -155,7 +155,11 @@ const getRecentlyReportedFoundItems = async (limit: number = 10) => {
   return foundItems;
 };
 
-const updateFoundItem = async (itemId: string, userId: string, data: any) => {
+const updateFoundItem = async (
+  itemId: string,
+  // userId: string,
+  data: any
+) => {
   try {
     if (data.dateFound) {
       data.dateFound = new Date(data.dateFound).toISOString();
@@ -164,7 +168,7 @@ const updateFoundItem = async (itemId: string, userId: string, data: any) => {
     const updatedItem = await prisma.foundItem.updateMany({
       where: {
         id: itemId,
-        userId: userId,
+        // userId: userId,
       },
       data: {
         categoryId: data.categoryId,
@@ -204,12 +208,15 @@ const getSingleFoundItemById = async (itemId: string) => {
   return foundItem;
 };
 
-const deleteFoundItem = async (itemId: string, userId: string) => {
+const deleteFoundItem = async (
+  itemId: string
+  //  userId: string
+) => {
   try {
     const deletedItem = await prisma.foundItem.deleteMany({
       where: {
         id: itemId,
-        userId: userId,
+        // userId: userId,
       },
     });
 

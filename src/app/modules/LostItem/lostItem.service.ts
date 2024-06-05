@@ -112,7 +112,7 @@ const getSingleLostItemById = async (
 };
 
 const updateLostItem = async (
-  userId: string,
+  // userId: string,
   lostItemId: string,
   data: Partial<LostItem>
 ) => {
@@ -123,7 +123,7 @@ const updateLostItem = async (
   const updatedLostItem = await prisma.lostItem.updateMany({
     where: {
       id: lostItemId,
-      userId,
+      // userId,
     },
     data: {
       ...restData,
@@ -133,11 +133,14 @@ const updateLostItem = async (
   return updatedLostItem;
 };
 
-const deleteLostItem = async (userId: string, lostItemId: string) => {
+const deleteLostItem = async (
+  // userId: string,
+  lostItemId: string
+) => {
   const deletedLostItem = await prisma.lostItem.deleteMany({
     where: {
       id: lostItemId,
-      userId,
+      // userId,
     },
   });
 
@@ -149,14 +152,14 @@ const deleteLostItem = async (userId: string, lostItemId: string) => {
 };
 
 const updateIsFound = async (
-  userId: string,
+  // userId: string,
   lostItemId: string,
   isFound: boolean
 ) => {
   const updatedLostItem = await prisma.lostItem.updateMany({
     where: {
       id: lostItemId,
-      userId,
+      // userId,
     },
     data: {
       isFound,

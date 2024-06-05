@@ -45,7 +45,7 @@ router.get(
 
 router.delete(
   "/found-items/:itemId",
-  auth("admin"),
+  // auth("admin"),
   FoundItemController.deleteFoundItem
 );
 

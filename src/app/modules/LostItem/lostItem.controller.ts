@@ -192,11 +192,11 @@ const getSingleLostItemById = async (req: Request, res: Response) => {
 
 const updateLostItem = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    // const userId = (req as any).user.id;
     const lostItemId = req.params.id;
     const updatedData = req.body;
     const updatedLostItem = await LostItemService.updateLostItem(
-      userId,
+      // userId,
       lostItemId,
       updatedData
     );
@@ -218,10 +218,10 @@ const updateLostItem = async (req: Request, res: Response) => {
 
 const deleteLostItem = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    // const userId = (req as any).user.id;
     const lostItemId = req.params.id;
     const deletedLostItem = await LostItemService.deleteLostItem(
-      userId,
+      // userId,
       lostItemId
     );
 
@@ -254,7 +254,7 @@ const deleteLostItem = async (req: Request, res: Response) => {
 
 const updateIsFound = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    // const userId = (req as any).user.id;
     const lostItemId = req.params.id;
     const { isFound } = req.body;
 
@@ -269,7 +269,7 @@ const updateIsFound = async (req: Request, res: Response) => {
     }
 
     const updatedLostItem = await LostItemService.updateIsFound(
-      userId,
+      // userId,
       lostItemId,
       isFound
     );

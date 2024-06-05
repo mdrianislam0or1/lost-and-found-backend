@@ -159,13 +159,13 @@ const getRecentlyReportedFoundItems = async (req: Request, res: Response) => {
 
 const updateFoundItem = async (req: Request, res: Response) => {
   try {
-    const userId = req.user.id;
+    // const userId = req.user.id;
     const { itemId } = req.params;
     const updateData = req.body;
 
     const updatedItem = await FoundItemServices.updateFoundItem(
       itemId,
-      userId,
+      // userId,
       updateData
     );
 
@@ -216,10 +216,13 @@ const getSingleFoundItemById = async (req: Request, res: Response) => {
 
 const deleteFoundItem = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    // const userId = (req as any).user.id;
     const { itemId } = req.params;
 
-    const deletedItem = await FoundItemServices.deleteFoundItem(itemId, userId);
+    const deletedItem = await FoundItemServices.deleteFoundItem(
+      itemId
+      // userId
+    );
 
     res.status(200).json({
       success: true,

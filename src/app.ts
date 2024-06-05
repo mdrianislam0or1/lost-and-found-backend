@@ -8,6 +8,7 @@ import router from "./app/routes";
 
 const app: Application = express();
 app.use(
+  // cors({ origin: "http://localhost:3000", credentials: true })
   cors({ origin: "https://the-missing-place.vercel.app", credentials: true })
 );
 app.use(cookieParser());
